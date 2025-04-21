@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Home{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+                <h1 class="display-4 mb-4">Welcome to SymBook 📚</h1>
+                <p class="lead text-muted">Easily manage your book collection with our Symfony application. Keep track of all your favorite books and manage them effortlessly.</p>
+
+                <div class="mt-4">
+                    <a href="{{ path('app_livres_list') }}" class="btn btn-lg btn-primary shadow-sm">View Books</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white text-center py-4 mt-5">
+        <p>&copy; {{ "now"|date("Y") }} SymBook - All Rights Reserved</p>
+    </footer>
+{% endblock %}
