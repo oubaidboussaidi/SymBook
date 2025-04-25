@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Espace Admin : Détail du Livre{% endblock %}
+
+{% block body %}
+    <h1>Détail du livre</h1>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-3">
+                <div class="card">
+                    <img src="{{ livre.image }}"  alt="photo du livre">
+                </div>
+            </div>
+            <div class="col">
+                <h2>{{ livre.titre }} ( {{ livre.prix }} DT)</h2>
+                <h3>Éditeur: {{ livre.editeur }}</h3>
+                <h3> Date_Edition : {{ livre.dateEdition|date('d-m-Y') }}</h3>
+                <h4> ISBN:  {{ livre.isbn }}</h4>
+                <p> Résumé:  {{ livre.resume }}</p>
+                <a href="{{ path('app_livres_show3') }}" class="btn btn-secondary">Retour à la liste</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
