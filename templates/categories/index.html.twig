@@ -1,25 +1,41 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello CategoriesController!{% endblock %}
+{% block title %}Liste des Catégories{% endblock %}
 
 {% block body %}
-    <h1>List of Categories</h1>
+    <div class="container mt-4">
+        <h1>Liste des Catégories</h1>
 
-    <div class="d-flex justify-content-end mb-3">
-        <a href="{{ path('admin_categories_create') }}" class="btn btn-primary">
-            Ajouter une nouvelle catégorie
-        </a>
+        <div class="d-flex justify-content-end mb-3">
+            <a href="{{ path('admin_categories_create') }}" class="btn btn-primary">
+                Ajouter une nouvelle catégorie
+            </a>
+        </div>
+
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Libellé</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for cat in categories %}
+                <tr>
+                    <th scope="row">{{ cat.id }}</th>
+                    <td>{{ cat.libelle }}</td>
+                    <td class="d-flex justify-content-start">
+                        <a href="{{ path('admin_categories_edit', {id: cat.id}) }}" class="btn btn-warning btn-sm mr-2">Editer</a>
+                        <a href="{{ path('admin_categories_details', {id: cat.id}) }}" class="btn btn-info btn-sm mr-2">Voir détails</a>
+                        <a href="{{ path('admin_categories_delete', {id: cat.id}) }}" class="btn btn-danger btn-sm"
+                           onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette catégorie ?');">
+                            Supprimer
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
-
-
-    <ul>
-        {% for cat in categories %}
-            <li>
-                {{ cat.libelle }}
-            </li>
-               <li> <a  href="{{ path('admin_categories_edit', {id: cat.id}) }}" class="btn btn-warning btn-sm">Editer</a>
-                <a  href="#" class="btn btn-warning btn-sm" >Voir detail ...</a>
-            </li>
-        {% endfor %}
-    </ul>
 {% endblock %}

@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Form;
 
 use App\Entity\Categories;
@@ -32,7 +33,6 @@ class LivreType extends AbstractType
                 },
                 'label' => 'Catégorie'
             ])
-
             ->add('save', SubmitType::class, [
                 'label' => 'Enregistrer',
                 'attr' => ['class' => 'btn btn-primary mt-3']
@@ -43,6 +43,7 @@ class LivreType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Livres::class,
+            'csrf_protection' => false,
         ]);
     }
 }

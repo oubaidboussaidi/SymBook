@@ -82,6 +82,7 @@ final class LivresController extends AbstractController
     {
         $em->remove($livre);
         $em->flush();
+        $this->addFlash('success', "Le livre  a ete supprime");
         return $this->redirectToRoute('app_livres_list');
     }
 

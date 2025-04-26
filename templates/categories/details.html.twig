@@ -1,0 +1,18 @@
+{# templates/category/details.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de la Catégorie{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>Détails de la Catégorie: {{ category.libelle }}</h1>
+
+        <p><strong>ID:</strong> {{ category.id }}</p>
+        <p><strong>Libellé:</strong> {{ category.libelle }}</p>
+
+        <div>
+            <a href="{{ path('admin_categories') }}" class="btn btn-secondary">Retour à la liste</a>
+        </div>
+    </div>
+{% endblock %}

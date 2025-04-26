@@ -54,4 +54,34 @@ final class CategoriesController extends AbstractController
         return $this->render('categories/edit.html.twig', ['f'=>$form]);
     }
 
+    #[Route('/admin/categories/delete/{id}', name: 'admin_categories_delete')]
+    public function delete(int $id, CategoriesRepository $categoriesRepository, EntityManagerInterface $em): Response
+    {
+        $category = $categoriesRepository->find($id);
+
+        if (!$category) {
+            $this->addFlash('error', 'Catégorie non trouvée');
+            return $this->redirectToRoute('admin_categories');
+        }
+
+        $em->remove($category);
+        $em->flush();
+        $this->addFlash('success', 'La catégorie a été supprimée avec succès.');
+
+        return $this->redirectToRoute('admin_categories');
+    }
+    #[Route('/admin/categories/{id}', name: 'admin_categories_details')]
+    public function details(int $id, CategoriesRepository $rep): Response
+    {
+        $category = $rep->find($id);
+
+        if (!$category) {
+            throw $this->createNotFoundException('La catégorie demandée n\'existe pas.');
+        }
+
+        return $this->render('categories/details.html.twig', [
+            'category' => $category,
+        ]);
+    }
+
 }

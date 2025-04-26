@@ -5,6 +5,25 @@
 {% block body %}
     <div class="container mt-4">
         <h1>Modifier la Catégorie</h1>
-        {{ form(f) }}
+
+        {{ form_start(f) }}  <!-- Démarrer le formulaire -->
+
+        <div class="mb-3">
+            {{ form_row(f.slug, { 'attr': {'class': 'form-control'} }) }}  <!-- Ajout d'une classe Bootstrap à chaque champ -->
+        </div>
+
+        <div class="mb-3">
+            {{ form_row(f.libelle, { 'label': 'Libellé', 'attr': {'class': 'form-control'} }) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_row(f.description, { 'label': 'Description', 'attr': {'class': 'form-control'} }) }}
+        </div>
+
+        <div class="d-flex justify-content-end">
+            {{ form_row(f.save, { 'attr': {'class': 'btn btn-primary'} }) }}
+        </div>
+
+        {{ form_end(f) }}
     </div>
 {% endblock %}

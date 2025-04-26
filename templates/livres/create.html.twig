@@ -5,7 +5,48 @@
 {% block body %}
     <div class="container mt-4">
         <h1 class="mb-4">Ajouter un livre</h1>
-        {{ form(f) }}
-    </div>
+        {{ form_start(f, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
 
+        <div class="mb-3">
+            {{ form_row(f.titre) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_row(f.resume) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_row(f.editeur) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_row(f.dateEdition) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_row(f.prix) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_row(f.slug) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_row(f.isbn) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_row(f.image) }}
+        </div>
+
+        <div class="mb-3">
+            {{ form_row(f.cat) }}
+        </div>
+
+        <div class="d-flex justify-content-end">
+            {{ form_row(f.save) }}
+        </div>
+
+        {{ form_end(f) }}
+    </div>
 {% endblock %}

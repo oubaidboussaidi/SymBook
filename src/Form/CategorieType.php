@@ -21,12 +21,14 @@ class CategorieType extends AbstractType
             ->add('description',TextareaType::class,['label'=>'Description :','required'=>false])
             ->add('save',SubmitType::class)
         ;
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Categories::class,
+            'csrf_protection' => false,
         ]);
     }
 
