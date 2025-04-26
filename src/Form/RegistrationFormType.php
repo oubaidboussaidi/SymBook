@@ -24,7 +24,7 @@ class RegistrationFormType extends AbstractType
                         'message' => 'Please enter an email',
                     ]),
                     new EmailConstraint([
-                        'mode' => 'strict', // Ensures strict RFC-compliant email format
+                        'mode' => 'strict',
                         'message' => 'Please enter a valid email address.',
                     ]),
                 ],
