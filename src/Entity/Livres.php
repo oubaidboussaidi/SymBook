@@ -17,15 +17,8 @@ class Livres
     #[ORM\Column(length: 255)]
     private ?string $titre = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $slag = null;
-
-    #[ORM\Column(length: 255)]
-    private ?string $image = null;
-
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $resume = null;
-
 
     #[ORM\Column(length: 255)]
     private ?string $editeur = null;
@@ -36,8 +29,17 @@ class Livres
     #[ORM\Column]
     private ?float $prix = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $slug = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $isbn = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $image = null;
+
     #[ORM\ManyToOne(inversedBy: 'livres')]
-    private ?Categories $category = null;
+    private ?Categories $cat = null;
 
     public function getId(): ?int
     {
@@ -52,30 +54,6 @@ class Livres
     public function setTitre(string $titre): static
     {
         $this->titre = $titre;
-
-        return $this;
-    }
-
-    public function getSlag(): ?string
-    {
-        return $this->slag;
-    }
-
-    public function setSlag(string $slag): static
-    {
-        $this->slag = $slag;
-
-        return $this;
-    }
-
-    public function getImage(): ?string
-    {
-        return $this->image;
-    }
-
-    public function setImage(string $image): static
-    {
-        $this->image = $image;
 
         return $this;
     }
@@ -129,14 +107,50 @@ class Livres
         return $this;
     }
 
-    public function getCategory(): ?Categories
+    public function getSlug(): ?string
     {
-        return $this->category;
+        return $this->slug;
     }
 
-    public function setCategory(?Categories $category): static
+    public function setSlug(string $slug): static
     {
-        $this->category = $category;
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function getIsbn(): ?string
+    {
+        return $this->isbn;
+    }
+
+    public function setIsbn(string $isbn): static
+    {
+        $this->isbn = $isbn;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(string $image): static
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    public function getCat(): ?Categories
+    {
+        return $this->cat;
+    }
+
+    public function setCat(?Categories $cat): static
+    {
+        $this->cat = $cat;
 
         return $this;
     }

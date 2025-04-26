@@ -6,6 +6,7 @@ use App\Repository\CategoriesRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CategoriesRepository::class)]
 class Categories
@@ -15,19 +16,31 @@ class Categories
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $libelle = null;
-
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Le libellé ne peut pas être vide.")]
+    #[Assert\Length(
+        min: 3,
+        max: 20,
+        minMessage: "Le libellé doit faire au moins {{ limit }} caractères.",
+        maxMessage: "Le libellé ne peut pas dépasser {{ limit }} caractères."
+    )]
+    private ?string $libelle = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\NotBlank(message: "La description ne peut pas être vide.")]
+    #[Assert\Length(
+        min: 10,
+        minMessage: "La description doit faire au moins {{ limit }} caractères."
+    )]
     private ?string $description = null;
 
     /**
      * @var Collection<int, Livres>
      */
-    #[ORM\OneToMany(targetEntity: Livres::class, mappedBy: 'category')]
+    #[ORM\OneToMany(targetEntity: Livres::class, mappedBy: 'cat')]
     private Collection $livres;
 
     public function __construct()
@@ -40,26 +53,27 @@ class Categories
         return $this->id;
     }
 
-    public function getLibelle(): ?string
-    {
-        return $this->libelle;
-    }
-
-    public function setLibelle(?string $libelle): static
-    {
-        $this->libelle = $libelle;
-
-        return $this;
-    }
-
     public function getSlug(): ?string
     {
         return $this->slug;
     }
 
+
     public function setSlug(string $slug): static
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function getLibelle(): ?string
+    {
+        return $this->libelle;
+    }
+
+    public function setLibelle(string $libelle): static
+    {
+        $this->libelle = $libelle;
 
         return $this;
     }
@@ -69,7 +83,7 @@ class Categories
         return $this->description;
     }
 
-    public function setDescription(string $description): static
+    public function setDescription(?string $description): static
     {
         $this->description = $description;
 
@@ -88,7 +102,7 @@ class Categories
     {
         if (!$this->livres->contains($livre)) {
             $this->livres->add($livre);
-            $livre->setCategory($this);
+            $livre->setCat($this);
         }
 
         return $this;
@@ -98,8 +112,8 @@ class Categories
     {
         if ($this->livres->removeElement($livre)) {
             // set the owning side to null (unless already changed)
-            if ($livre->getCategory() === $this) {
-                $livre->setCategory(null);
+            if ($livre->getCat() === $this) {
+                $livre->setCat(null);
             }
         }
 

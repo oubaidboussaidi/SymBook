@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello CategoriesController!{% endblock %}
+
+{% block body %}
+    <h1>List of Categories</h1>
+
+    <div class="d-flex justify-content-end mb-3">
+        <a href="{{ path('admin_categories_create') }}" class="btn btn-primary">
+            Ajouter une nouvelle catégorie
+        </a>
+    </div>
+
+
+    <ul>
+        {% for cat in categories %}
+            <li>
+                {{ cat.libelle }}
+            </li>
+               <li> <a  href="{{ path('admin_categories_edit', {id: cat.id}) }}" class="btn btn-warning btn-sm">Editer</a>
+                <a  href="#" class="btn btn-warning btn-sm" >Voir detail ...</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
