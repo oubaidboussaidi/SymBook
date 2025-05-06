@@ -8,14 +8,33 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotBlank;
+
 
 class UserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+            ->add('nom', TextType::class, [
+                'label' => 'Nom',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez entrer votre nom',
+                    ]),
+                ],
+            ])
+            ->add('prenom', TextType::class, [
+                'label' => 'Prénom',
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez entrer votre prénom',
+                    ]),
+                ],
+            ])
             ->add('email', EmailType::class, [
                 'label' => 'Email',
             ])
@@ -26,7 +45,7 @@ class UserType extends AbstractType
                     'Administrateur' => 'ROLE_ADMIN',
                 ],
                 'multiple' => true,
-                'expanded' => true, // checkbox au lieu de liste déroulante
+                'expanded' => true,
             ])
             ->add('password', PasswordType::class, [
                 'label' => 'Mot de passe',

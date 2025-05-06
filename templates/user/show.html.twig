@@ -9,6 +9,8 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Utilisateur #{{ user.id }}</h5>
+                <p class="card-text"><strong>Nom :</strong> {{ user.nom }}</p>
+                <p class="card-text"><strong>Prenom :</strong> {{ user.prenom }}</p>
                 <p class="card-text"><strong>Email :</strong> {{ user.email }}</p>
                 <p class="card-text"><strong>Rôles :</strong> {{ user.roles|join(', ') }}</p>
                 <p class="card-text"><strong>Vérifié :</strong>
