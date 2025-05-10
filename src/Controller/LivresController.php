@@ -21,6 +21,13 @@ final class LivresController extends AbstractController
             'livre' => $livre,
         ]);
     }
+    #[Route('user/livres/show/{id}', name: 'app_livres_show_user')]
+    public function showuser(Livres $livre): Response
+    {
+        return $this->render('livres/recherche_user.html.twig', [
+            'livre' => $livre,
+        ]);
+    }
 
     #[Route('/livres/show/title/{titre}', name: 'app_livres_show_by_title')]
     public function showByTitle(LivresRepository $rep, string $titre): Response
@@ -114,4 +121,41 @@ final class LivresController extends AbstractController
 
         return $this->render('livres/all.html.twig', ['livre' => $livres]);
     }
+    #[Route('user/livres/boutique', name: 'app_livres_boutique')]
+    public function boutique(Request $request, LivresRepository $rep, PaginatorInterface $paginator): Response
+    {
+        $titre = $request->query->get('titre');
+        $editeur = $request->query->get('editeur');
+        $cat = $request->query->get('cat');
+
+        $qb = $rep->createQueryBuilder('l')
+            ->leftJoin('l.cat', 'c')
+            ->addSelect('c');
+
+        if ($titre) {
+            $qb->andWhere('l.titre LIKE :titre')->setParameter('titre', "%$titre%");
+        }
+
+        if ($editeur) {
+            $qb->andWhere('l.editeur LIKE :editeur')->setParameter('editeur', "%$editeur%");
+        }
+
+        if ($cat) {
+            $qb->andWhere('c.libelle LIKE :cat')->setParameter('cat', "%$cat%");
+        }
+
+        $pagination = $paginator->paginate(
+            $qb,
+            $request->query->getInt('page', 1),
+            8
+        );
+
+        return $this->render('livres/boutique.html.twig', [
+            'livres' => $pagination
+        ]);
+    }
+
+
+
+
 }

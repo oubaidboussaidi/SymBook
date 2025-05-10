@@ -20,8 +20,20 @@
                     <h2 class="card-title mb-4 text-center">Create an Account</h2>
 
                     {{ form_start(registrationForm) }}
+                    <div class="mb-3">
+                        {{ form_label(registrationForm.nom, null, { 'label_attr': {'class': 'form-label'} }) }}
+                        {{ form_widget(registrationForm.nom, { 'attr': {'class': 'form-control'} }) }}
+                        {{ form_errors(registrationForm.nom) }}
+                    </div>
 
-                        <div class="mb-3">
+                    <div class="mb-3">
+                        {{ form_label(registrationForm.prenom, null, { 'label_attr': {'class': 'form-label'} }) }}
+                        {{ form_widget(registrationForm.prenom, { 'attr': {'class': 'form-control'} }) }}
+                        {{ form_errors(registrationForm.prenom) }}
+                    </div>
+
+
+                    <div class="mb-3">
                             {{ form_label(registrationForm.email, null, { 'label_attr': {'class': 'form-label'} }) }}
                             {{ form_widget(registrationForm.email, { 'attr': {'class': 'form-control'} }) }}
                             {{ form_errors(registrationForm.email) }}
