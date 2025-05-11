@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\LivresRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: LivresRepository::class)]
 class Livres
@@ -41,6 +42,10 @@ class Livres
     #[ORM\ManyToOne(inversedBy: 'livres')]
     private ?Categories $cat = null;
 
+    #[ORM\Column(type: 'integer')]
+    #[Assert\GreaterThanOrEqual(0)]
+    private ?int $quantiteDisponible = 0;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -54,7 +59,6 @@ class Livres
     public function setTitre(string $titre): static
     {
         $this->titre = $titre;
-
         return $this;
     }
 
@@ -66,10 +70,8 @@ class Livres
     public function setResume(?string $resume): static
     {
         $this->resume = $resume;
-
         return $this;
     }
-
 
     public function getEditeur(): ?string
     {
@@ -79,7 +81,6 @@ class Livres
     public function setEditeur(string $editeur): static
     {
         $this->editeur = $editeur;
-
         return $this;
     }
 
@@ -91,7 +92,6 @@ class Livres
     public function setDateEdition(\DateTimeInterface $dateEdition): static
     {
         $this->dateEdition = $dateEdition;
-
         return $this;
     }
 
@@ -103,7 +103,6 @@ class Livres
     public function setPrix(float $prix): static
     {
         $this->prix = $prix;
-
         return $this;
     }
 
@@ -115,7 +114,6 @@ class Livres
     public function setSlug(string $slug): static
     {
         $this->slug = $slug;
-
         return $this;
     }
 
@@ -127,7 +125,6 @@ class Livres
     public function setIsbn(string $isbn): static
     {
         $this->isbn = $isbn;
-
         return $this;
     }
 
@@ -139,7 +136,6 @@ class Livres
     public function setImage(string $image): static
     {
         $this->image = $image;
-
         return $this;
     }
 
@@ -151,7 +147,17 @@ class Livres
     public function setCat(?Categories $cat): static
     {
         $this->cat = $cat;
+        return $this;
+    }
 
+    public function getQuantiteDisponible(): ?int
+    {
+        return $this->quantiteDisponible;
+    }
+
+    public function setQuantiteDisponible(int $quantiteDisponible): static
+    {
+        $this->quantiteDisponible = $quantiteDisponible;
         return $this;
     }
 }

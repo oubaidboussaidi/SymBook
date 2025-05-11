@@ -15,15 +15,48 @@ class CartService
         $this->livresRepository = $livresRepository;
     }
 
-    public function add(int $id, int $quantity = 1): void
+    public function add(int $id, int $quantity = 1): bool
     {
-        $cart = $this->session->get('cart', []);
-        if (isset($cart[$id])) {
-            $cart[$id] += $quantity;
-        } else {
-            $cart[$id] = $quantity;
+        $livre = $this->livresRepository->find($id);
+        if (!$livre) {
+            return false;
         }
+
+        $stock = $livre->getQuantiteDisponible();
+        $cart = $this->session->get('cart', []);
+        $current = $cart[$id] ?? 0;
+
+        if ($current + $quantity > $stock) {
+            return false; // Not enough stock
+        }
+
+        $cart[$id] = $current + $quantity;
         $this->session->set('cart', $cart);
+        return true;
+    }
+
+    public function updateQuantity(int $id, int $quantity): bool
+    {
+        $livre = $this->livresRepository->find($id);
+        if (!$livre) {
+            return false;
+        }
+
+        $stock = $livre->getQuantiteDisponible();
+        $cart = $this->session->get('cart', []);
+
+        if ($quantity > $stock) {
+            return false;
+        }
+
+        if ($quantity > 0) {
+            $cart[$id] = $quantity;
+        } else {
+            unset($cart[$id]); // Remove if 0
+        }
+
+        $this->session->set('cart', $cart);
+        return true;
     }
 
     public function remove(int $id): void
@@ -33,6 +66,11 @@ class CartService
             unset($cart[$id]);
         }
         $this->session->set('cart', $cart);
+    }
+
+    public function clearAll(): void
+    {
+        $this->session->remove('cart');
     }
 
     public function getCart(): array
@@ -66,22 +104,4 @@ class CartService
         }
         return $total;
     }
-    public function clearAll(): void
-{
-    $this->session->remove('cart');
-}
-
-public function updateQuantity(int $id, int $quantity): void
-{
-    $cart = $this->session->get('cart', []);
-    if (isset($cart[$id])) {
-        if ($quantity > 0) {
-            $cart[$id] = $quantity;
-        } else {
-            unset($cart[$id]); // If quantity is 0 or less, remove item
-        }
-        $this->session->set('cart', $cart);
-    }
-}
-
 }

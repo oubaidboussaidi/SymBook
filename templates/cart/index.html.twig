@@ -6,6 +6,16 @@
 <div class="container mt-5">
     <h1>Mon Panier</h1>
 
+    {# Flash messages #}
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    {% endfor %}
+
     {% if items|length == 0 %}
         <p>Votre panier est vide.</p>
     {% else %}
@@ -13,7 +23,7 @@
             <thead class="table-dark">
                 <tr>
                     <th>Livre</th>
-                    <th>Quantité</th>
+                    <th>Quantité (Stock dispo)</th>
                     <th>Prix Unitaire</th>
                     <th>Total</th>
                     <th>Action</th>
@@ -28,17 +38,29 @@
                         <td>
                             <div class="d-flex align-items-center">
                                 <form method="post" action="{{ path('cart_update_quantity', { id: item.livre.id }) }}" class="d-flex align-items-center">
-                                    <button type="button" class="btn btn-outline-secondary btn-sm" onclick="this.parentNode.querySelector('input').stepDown()">-</button>
-                                    <input type="number" name="quantity" value="{{ item.quantity }}" min="1" class="form-control text-center" style="max-width: 70px;">
-                                    <button type="button" class="btn btn-outline-secondary btn-sm" onclick="this.parentNode.querySelector('input').stepUp()">+</button>
+                                    <button type="button" class="btn btn-outline-secondary btn-sm"
+                                            onclick="let input = this.parentNode.querySelector('input'); if (input.stepDown) input.stepDown();">
+                                        -
+                                    </button>
+                                    <input type="number"
+                                           name="quantity"
+                                           value="{{ item.quantity }}"
+                                           min="1"
+                                           max="{{ item.livre.quantiteDisponible }}"
+                                           class="form-control text-center"
+                                           style="max-width: 70px;">
+                                    <button type="button" class="btn btn-outline-secondary btn-sm"
+                                            onclick="let input = this.parentNode.querySelector('input'); if (input.stepUp) input.stepUp();">
+                                        +
+                                    </button>
                                     <button type="submit" class="btn btn-primary btn-sm ms-2">Mettre à jour</button>
                                 </form>
+                                <small class="text-muted ms-2">Stock: {{ item.livre.quantiteDisponible }}</small>
                             </div>
                         </td>
 
                         <td>{{ item.livre.prix|number_format(2, '.', ',') }} DT</td>
 
-                        <!-- Total price for the item -->
                         <td>{{ (item.livre.prix * item.quantity)|number_format(2, '.', ',') }} DT</td>
 
                         <td>
