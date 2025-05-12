@@ -78,5 +78,13 @@
             </form>
         </div>
     {% endif %}
+    {% if is_granted('ROLE_USER') and items is not empty %}
+        <form method="get" action="{{ path('app_commande_valider') }}">
+            <button type="submit" class="btn btn-success w-100 mt-4">
+                <i class="fas fa-check-circle"></i> Passer la commande
+            </button>
+        </form>
+    {% endif %}
+
 </div>
 {% endblock %}
