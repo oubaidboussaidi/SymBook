@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Choisir le mode de paiement{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1>Choisissez votre mode de paiement</h1>
+        <form action="{{ path('checkout') }}" method="POST">
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="payment_method" id="card" value="card" required>
+                <label class="form-check-label" for="card">
+                    Paiement par carte
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="payment_method" id="delivery" value="delivery" required>
+                <label class="form-check-label" for="delivery">
+                    Paiement à la livraison
+                </label>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Continuer</button>
+        </form>
+    </div>
+{% endblock %}
