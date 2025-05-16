@@ -20,7 +20,7 @@ class CommandeService
     {
         $this->em = $em;
         $this->livresRepo = $livresRepo;
-        $this->session = $requestStack->getSession(); // Utilisation correcte
+        $this->session = $requestStack->getSession();
     }
 
     public function createCommande(User $user): Commande
@@ -44,18 +44,17 @@ class CommandeService
             $ligne->setPrixUnitaire($livre->getPrix());
             $ligne->setCommande($commande);
 
-            $this->em->persist($ligne); // Persister la ligne de commande
+            $this->em->persist($ligne);
 
-            $total += $livre->getPrix() * $quantite; // Calcul du total
+            $total += $livre->getPrix() * $quantite;
         }
 
         $commande->setTotal($total);
-        $this->em->persist($commande); // Persister la commande
-        $this->em->flush(); // Effectuer le commit de la base de données
+        $this->em->persist($commande);
+        $this->em->flush();
 
-        // Vider le panier après la commande
         $this->session->remove('cart');
 
-        return $commande; // Retourner la commande créée
+        return $commande;
     }
 }

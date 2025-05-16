@@ -1,3 +1,7 @@
+parameters:
+    stripe.secret_key: '%env(STRIPE_SK)%'
+    stripe.publishable_key: '%env(STRIPE_PUBLISHABLE_KEY)%'
+
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -13,7 +17,13 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
-    # Explicit definition for CommandeService to inject RequestStack
+    # Corrected service definition for StripeService
+    App\Service\StripeService:
+        arguments:
+            $secretKey: '%stripe.secret_key%'    # Injecting the Stripe secret key
+            $publishableKey: '%stripe.publishable_key%'  # Injecting the Stripe publishable key
+
+    # Other services definition
     App\Service\CommandeService:
         arguments:
             $requestStack: '@request_stack'
