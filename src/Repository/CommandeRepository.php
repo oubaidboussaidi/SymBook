@@ -15,6 +15,37 @@ class CommandeRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Commande::class);
     }
+    public function countOrdersByDate(?string $startDate, ?string $endDate): array
+    {
+        $qb = $this->createQueryBuilder('c')
+            ->select('c.dateCommande AS date')
+            ->orderBy('c.dateCommande', 'ASC');
+
+        if ($startDate && $endDate) {
+            $qb->andWhere('c.dateCommande BETWEEN :start AND :end')
+                ->setParameter('start', new \DateTime($startDate))
+                ->setParameter('end', new \DateTime($endDate));
+        }
+
+        $results = $qb->getQuery()->getResult();
+
+        // Regroupement en PHP par date (format YYYY-MM-DD)
+        $grouped = [];
+        foreach ($results as $row) {
+            $dateKey = $row['date']->format('Y-m-d');
+            if (!isset($grouped[$dateKey])) {
+                $grouped[$dateKey] = 0;
+            }
+            $grouped[$dateKey]++;
+        }
+
+        $final = [];
+        foreach ($grouped as $date => $total) {
+            $final[] = ['date' => $date, 'total' => $total];
+        }
+
+        return $final;
+    }
 
     //    /**
     //     * @return Commande[] Returns an array of Commande objects
