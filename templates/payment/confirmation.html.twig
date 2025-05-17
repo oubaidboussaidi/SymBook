@@ -1,0 +1,12 @@
+<h1>Merci pour votre commande !</h1>
+<p>Nous avons bien reçu votre commande. Voici les détails :</p>
+
+<ul>
+    {% for item in cartItems %}
+        <li>{{ item.livre.titre }} - {{ item.quantity }} x {{ item.livre.prix }} USD</li>
+    {% endfor %}
+</ul>
+
+<p>Total : {{ totalAmount }} USD</p>
+
+<p>Vous allez recevoir votre commande dans les plus brefs délais.</p>

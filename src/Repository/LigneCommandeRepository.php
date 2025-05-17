@@ -15,6 +15,24 @@ class LigneCommandeRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, LigneCommande::class);
     }
+    public function findMostSoldBook(?string $startDate, ?string $endDate): ?array
+    {
+        $qb = $this->createQueryBuilder('lc')
+            ->select('l.titre, SUM(lc.quantite) AS total')
+            ->join('lc.livre', 'l')
+            ->join('lc.commande', 'c')
+            ->groupBy('l.id')
+            ->orderBy('total', 'DESC')
+            ->setMaxResults(1);
+
+        if ($startDate && $endDate) {
+            $qb->andWhere('c.dateCommande BETWEEN :start AND :end')
+                ->setParameter('start', new \DateTime($startDate))
+                ->setParameter('end', new \DateTime($endDate));
+        }
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
 
     //    /**
     //     * @return LigneCommande[] Returns an array of LigneCommande objects

@@ -6,8 +6,8 @@
 <div class="container mt-5">
     <h1>Mon Panier</h1>
 
-    {# Flash messages #}
-    {% for label, messages in app.flashes() %}
+
+    {% for label, messages in app.flashes %}
         {% for message in messages %}
             <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
                 {{ message }}
@@ -34,7 +34,6 @@
                     <tr>
                         <td>{{ item.livre.titre }}</td>
 
-                        <!-- Quantity modification -->
                         <td>
                             <div class="d-flex align-items-center">
                                 <form method="post" action="{{ path('cart_update_quantity', { id: item.livre.id }) }}" class="d-flex align-items-center">
@@ -80,7 +79,7 @@
     {% endif %}
     
     {% if is_granted('ROLE_USER') and items is not empty %}
-        <form method="get" action="{{ path('app_commande_valider') }}">
+        <form method="get" action="{{ path('choose_payment')}}">
             <button type="submit" class="btn btn-success w-100 mt-4">
                 <i class="fas fa-check-circle"></i> Passer la commande
             </button>

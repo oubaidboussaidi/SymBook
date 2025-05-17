@@ -1,0 +1,96 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tableau de Bord{% endblock %}
+
+{% block body %}
+    <h1 style="text-align:center; margin-bottom: 30px;">📊 Tableau de Bord Administrateur</h1>
+
+    <form method="get" action="{{ path('admin_dashboard') }}" class="dashboard-filter" style="text-align:center; margin-bottom: 30px;">
+        <label for="start_date">📅 Date de début :</label>
+        <input type="date" id="start_date" name="start_date" value="{{ startDate }}" max="{{ "now"|date("Y-m-d") }}">
+
+        <label for="end_date" style="margin-left:20px;">📅 Date de fin :</label>
+        <input type="date" id="end_date" name="end_date" value="{{ endDate }}" max="{{ "now"|date("Y-m-d") }}">
+
+        <button type="submit" style="margin-left:20px; padding: 8px 16px; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;">
+            🔍 Filtrercd
+        </button>
+    </form>
+
+
+    <div style="display: flex; justify-content: space-around; flex-wrap: wrap;">
+        <div id="topBookChart" style="width: 45%; min-width: 300px; height: 400px;"></div>
+        <div id="ordersChart" style="width: 50%; min-width: 400px; height: 400px;"></div>
+    </div>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawCharts);
+
+        function drawCharts() {
+            drawTopBookChart();
+            drawOrdersChart();
+        }
+
+        function drawTopBookChart() {
+            var data = google.visualization.arrayToDataTable([
+                ['Livre', 'Quantité'],
+                {% if topBook %}
+                ['{{ topBook.titre }}', {{ topBook.total }}],
+                {% else %}
+                ['Aucun', 0],
+                {% endif %}
+            ]);
+
+            var options = {
+                title: '📘 Livre le Plus Vendu',
+                pieHole: 0.4,
+                colors: ['#1e88e5', '#e53935', '#43a047', '#fbc02d'],
+                chartArea: {width: '90%', height: '80%'},
+                legend: {position: 'bottom'},
+                animation: {
+                    startup: true,
+                    duration: 1000,
+                    easing: 'out'
+                }
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('topBookChart'));
+            chart.draw(data, options);
+        }
+
+        function drawOrdersChart() {
+            var data = google.visualization.arrayToDataTable([
+                ['Date', 'Commandes'],
+                {% for row in ordersByDate %}
+                ['{{ row.date|date("Y-m-d") }}', {{ row.total }}],
+                {% endfor %}
+            ]);
+
+            var options = {
+                title: '📦 Nombre de Commandes par Période',
+                hAxis: {
+                    title: 'Date',
+                    format: 'yyyy-MM-dd',
+                    slantedText: true,
+                    slantedTextAngle: 45
+                },
+                vAxis: {
+                    title: 'Nombre de commandes'
+                },
+                colors: ['#ff9800'],
+                chartArea: {width: '85%', height: '70%'},
+                animation: {
+                    startup: true,
+                    duration: 1000,
+                    easing: 'inAndOut'
+                },
+                legend: 'none'
+            };
+
+            var chart = new google.visualization.ColumnChart(document.getElementById('ordersChart'));
+            chart.draw(data, options);
+        }
+    </script>
+{% endblock %}
