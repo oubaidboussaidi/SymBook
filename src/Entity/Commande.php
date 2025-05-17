@@ -114,7 +114,6 @@ class Commande
     public function removeLigneCommande(LigneCommande $ligneCommande): static
     {
         if ($this->ligneCommandes->removeElement($ligneCommande)) {
-            // set the owning side to null (unless already changed)
             if ($ligneCommande->getCommande() === $this) {
                 $ligneCommande->setCommande(null);
             }

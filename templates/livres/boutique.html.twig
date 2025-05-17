@@ -54,11 +54,6 @@
                                     </a>
                                     {% if is_granted('ROLE_USER') %}
     <form method="post" action="{{ path('cart_add', { id: livre.id }) }}">
-        <div class="input-group input-group-sm mb-2" style="max-width: 120px; margin: 0 auto;">
-            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="this.parentNode.querySelector('input').stepDown()">-</button>
-            <input type="number" name="quantity" value="1" min="1" class="form-control text-center">
-            <button type="button" class="btn btn-outline-secondary btn-sm" onclick="this.parentNode.querySelector('input').stepUp()">+</button>
-        </div>
         <button type="submit" class="btn btn-success btn-sm w-100">
             <i class="fas fa-cart-plus"></i> Ajouter au Panier
         </button>

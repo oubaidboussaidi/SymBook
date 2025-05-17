@@ -6,7 +6,7 @@ use App\Entity\Commande;
 use App\Entity\LigneCommande;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\RequestStack; // Utilisation de RequestStack
+use Symfony\Component\HttpFoundation\RequestStack;
 use App\Repository\LivresRepository;
 
 class CommandeService
@@ -15,17 +15,19 @@ class CommandeService
     private LivresRepository $livresRepo;
     private $session;
 
-
     public function __construct(EntityManagerInterface $em, RequestStack $requestStack, LivresRepository $livresRepo)
     {
         $this->em = $em;
         $this->livresRepo = $livresRepo;
-        $this->session = $requestStack->getSession(); // Utilisation correcte
+        $this->session = $requestStack->getSession();
     }
 
     public function createCommande(User $user): Commande
     {
         $cart = $this->session->get('cart', []);
+        if (empty($cart)) {
+            throw new \Exception("Le panier est vide.");
+        }
 
         $commande = new Commande();
         $commande->setUser($user);
@@ -33,10 +35,17 @@ class CommandeService
         $commande->setStatut('en_attente');
 
         $total = 0;
+        $hasValidItems = false;
 
         foreach ($cart as $livreId => $quantite) {
             $livre = $this->livresRepo->find($livreId);
             if (!$livre) continue;
+
+            if ($quantite > $livre->getQuantiteDisponible()) {
+                continue;
+            }
+
+            $hasValidItems = true;
 
             $ligne = new LigneCommande();
             $ligne->setLivre($livre);
@@ -44,18 +53,24 @@ class CommandeService
             $ligne->setPrixUnitaire($livre->getPrix());
             $ligne->setCommande($commande);
 
-            $this->em->persist($ligne); // Persister la ligne de commande
+            $this->em->persist($ligne);
 
-            $total += $livre->getPrix() * $quantite; // Calcul du total
+            $livre->setQuantiteDisponible($livre->getQuantiteDisponible() - $quantite);
+            $this->em->persist($livre);
+
+            $total += $livre->getPrix() * $quantite;
+        }
+
+        if (!$hasValidItems || $total == 0) {
+            throw new \Exception("Commande invalide : aucun article disponible ou montant total nul.");
         }
 
         $commande->setTotal($total);
-        $this->em->persist($commande); // Persister la commande
-        $this->em->flush(); // Effectuer le commit de la base de données
+        $this->em->persist($commande);
+        $this->em->flush();
 
-        // Vider le panier après la commande
         $this->session->remove('cart');
 
-        return $commande; // Retourner la commande créée
+        return $commande;
     }
 }

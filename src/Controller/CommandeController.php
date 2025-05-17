@@ -24,12 +24,19 @@ final class CommandeController extends AbstractController
     public function valider(CommandeService $commandeService): Response
     {
         $user = $this->getUser();
-        $commande = $commandeService->createCommande($user);
 
-        return $this->render('commande/success.html.twig', [
-            'commande' => $commande
-        ]);
+        try {
+            $commande = $commandeService->createCommande($user);
+
+            return $this->render('commande/success.html.twig', [
+                'commande' => $commande
+            ]);
+        } catch (\Exception $e) {
+            $this->addFlash('danger', $e->getMessage());
+            return $this->redirectToRoute('cart_index');
+        }
     }
+
     #[Route('/mes-commandes', name: 'app_commande_historique')]
     #[IsGranted('ROLE_USER')]
     public function historique(CommandeRepository $commandeRepository): Response

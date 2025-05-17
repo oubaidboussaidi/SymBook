@@ -7,7 +7,7 @@
     <h1>Mon Panier</h1>
 
     {# Flash messages #}
-    {% for label, messages in app.flashes %}
+    {% for label, messages in app.flashes() %}
         {% for message in messages %}
             <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
                 {{ message }}
@@ -78,6 +78,7 @@
             </form>
         </div>
     {% endif %}
+    
     {% if is_granted('ROLE_USER') and items is not empty %}
         <form method="get" action="{{ path('app_commande_valider') }}">
             <button type="submit" class="btn btn-success w-100 mt-4">

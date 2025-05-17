@@ -27,7 +27,7 @@ class CartService
         $current = $cart[$id] ?? 0;
 
         if ($current + $quantity > $stock) {
-            return false; // Not enough stock
+            return false;
         }
 
         $cart[$id] = $current + $quantity;
@@ -52,7 +52,7 @@ class CartService
         if ($quantity > 0) {
             $cart[$id] = $quantity;
         } else {
-            unset($cart[$id]); // Remove if 0
+            unset($cart[$id]);
         }
 
         $this->session->set('cart', $cart);
