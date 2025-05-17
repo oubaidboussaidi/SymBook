@@ -82,4 +82,20 @@ class CommandeRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findAllWithOptionalStatus(?string $status = null): array
+    {
+        $qb = $this->createQueryBuilder('c')
+            ->leftJoin('c.user', 'u')
+            ->addSelect('u')
+            ->orderBy('c.dateCommande', 'DESC');
+
+        if ($status !== null) {
+            $qb->andWhere('c.statut = :status')
+            ->setParameter('status', $status);
+        }
+
+        return $qb->getQuery()->getResult();
+    }
+
+
 }

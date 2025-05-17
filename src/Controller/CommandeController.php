@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use App\Repository\CommandeRepository;
+use Symfony\Component\HttpFoundation\Request;
+
 
 final class CommandeController extends AbstractController
 {
@@ -48,4 +50,18 @@ final class CommandeController extends AbstractController
             'commandes' => $commandes,
         ]);
     }
+    
+    #[Route('/admin/commandes', name: 'admin_commande_index')]
+    #[IsGranted('ROLE_ADMIN')]
+    public function adminList(Request $request, CommandeRepository $commandeRepo): Response
+    {
+        $status = $request->query->get('statut');
+        $commandes = $commandeRepo->findAllWithOptionalStatus($status);
+
+        return $this->render('admin/commande_list.html.twig', [
+            'commandes' => $commandes,
+            'selectedStatus' => $status,
+        ]);
+    }
+
 }

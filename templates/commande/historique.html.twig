@@ -3,32 +3,30 @@
 {% block title %}Mes Commandes{% endblock %}
 
 {% block body %}
-    <div class="container mt-5">
-        <h1 class="mb-4">Historique de mes commandes</h1>
+<div class="container mt-5">
+    <h1 class="mb-4">Historique de mes commandes</h1>
 
-        {% if commandes is empty %}
-            <p>Vous n'avez passé aucune commande.</p>
-        {% else %}
-            <table class="table table-striped">
-                <thead>
+    {% if commandes is empty %}
+        <div class="alert alert-info">Vous n'avez passé aucune commande.</div>
+    {% else %}
+        <table class="table table-bordered table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Date</th>
+                    <th>Montant Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for commande in commandes %}
                     <tr>
-                        <th>ID</th>
-                        <th>Date</th>
-                        <th>Total</th>
-                        <th>Statut</th>
+                        <td>{{ commande.id }}</td>
+                        <td>{{ commande.dateCommande|date('d/m/Y à H:i') }}</td>
+                        <td>{{ commande.total|number_format(2, '.', ',') }} DT</td>
                     </tr>
-                </thead>
-                <tbody>
-                    {% for commande in commandes %}
-                        <tr>
-                            <td>{{ commande.id }}</td>
-                            <td>{{ commande.dateCommande|date('d/m/Y H:i') }}</td>
-                            <td>{{ commande.total }} DT</td>
-                            <td>{{ commande.statut }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% endif %}
-    </div>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+</div>
 {% endblock %}
