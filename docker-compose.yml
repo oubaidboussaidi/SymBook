@@ -12,7 +12,7 @@ services:
       - db
     environment:
       APP_ENV: dev
-      DATABASE_URL: "mysql://root:@db:3306/symbook?serverVersion=10.4&charset=utf8mb4"
+      DATABASE_URL: "mysql://root:oubaid@db:3306/symbook?serverVersion=10.4&charset=utf8mb4"
       MAILER_DSN: smtp://SymBookDSI@gmail.com:azertyDSI3@smtp.gmail.com:587
 
   db:
