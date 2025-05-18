@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    container_name: symfony-web
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - db
+    environment:
+      APP_ENV: dev
+      DATABASE_URL: "mysql://root:@db:3306/symbook?serverVersion=10.4&charset=utf8mb4"
+      MAILER_DSN: smtp://SymBookDSI@gmail.com:azertyDSI3@smtp.gmail.com:587
+
+  db:
+    image: mariadb:10.4
+    container_name: symfony-db
+    environment:
+      MYSQL_ROOT_PASSWORD: oubaid
+      MYSQL_DATABASE: symbook
+    ports:
+      - "3306:3306"
+    volumes:
+      - db-data:/var/lib/mysql
+
+volumes:
+  db-data:
